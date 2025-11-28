@@ -1,0 +1,41 @@
+generator client{
+    provider = "prisma-client-js"
+}
+
+
+//data source
+datasource db{
+    provider = "mongodb"
+    url = env("DATABASE_URL")
+}
+
+//User (to be edited)
+model User{
+    id                  String @id @default(auto()) @map("_id") @db.ObjectId
+    name                String?
+    email               String @unique
+    image               String?
+    bookedVisits        Json[]
+    favResidenciesID    String? @db.ObjectId
+    ownedResidencies    Residency[] @relation("Owner")
+}
+
+//Residency (to be reformed)
+model Residency{
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    description String
+    price       Int
+    address     String
+    city        String
+    country     String
+    image       String
+    facilities  Json
+    userEmail   String
+    //every owner is an instance of user
+    owner       User @relation("Owner", fields: [userEmail], references: [email])
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@unique(fields: [userEmail, address])
+}
