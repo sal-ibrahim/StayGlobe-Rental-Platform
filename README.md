@@ -1,0 +1,1 @@
+# StayGlobe-Rental-Platform
